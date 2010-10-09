@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HTML5 Podcast Client</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+		<script src="../js/h5utils.js"></script>
+		
+		<script>
+		
+			$(document).ready(function() {
+				
+				var currentAudio = localStorage.getItem("currentAudio");
+				var currentTime = localStorage.getItem("currentTime");
+				
+				if(currentAudio && currentTime) {
+					$("audio").attr("src", currentAudio);
+					//$("audio").attr("currentTime", currentTime);
+				}
+												
+
+				$("a[href$='.mp3']").click(function(e) {
+					e.preventDefault();
+					
+					var source = $(this).attr("href");
+					localStorage.setItem("currentAudio", source);
+					
+					$("audio").attr("src", source);
+					$("audio").get(0).play();
+
+				});
+				
+				$("audio").bind("timeupdate", function() {
+
+					localStorage.setItem("currentTime", $(this).attr("currentTime"));
+					
+				});
+
+			});	
+
+		
+		</script>
+	</head>
+	<body>
+		<section>
+			<ul>
+				<li><a href="http://tekpub.s3.amazonaws.com/tdl/05-Homerun.mp3">05. Homerun</a></li>
+				<li><a href="http://tekpub.s3.amazonaws.com/tdl/04-Being-Mean.mp3">04. Beeing Mean</a></li>
+				<li><a href="http://tekpub.s3.amazonaws.com/tdl/03-problems.mp3">03. Problems</a></li>
+				<li><a href="http://tekpub.s3.amazonaws.com/tdl/02-Fame.mp3">02. Fame and Notoriety</a></li>
+				<li><a href="http://tekpub.s3.amazonaws.com/tdl/01-Getting-Fired.mp3">01. Getting Fired</a></li>
+			</ul>
+		</section>
+		
+		<section>
+			<audio controls></audio>
+		</section>	
+	</body>
+</html>
+
