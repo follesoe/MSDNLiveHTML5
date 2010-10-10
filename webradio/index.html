@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NRK Nettradio</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+		<script src="../js/jquery.tmpl.js"></script>
+		<script src="../js/modernizr-1.5.js"></script>
+	</head>
+	
+	<body>
+	
+		<ul id="channels">
+			
+		</ul>
+		
+		<section>
+			<div id="currentChannel"></div>
+			<audio></audio>
+		</section>	
+		
+		<script id="channelsTemplate" type="text/html">
+			<li><a href="${name}"><img src="${logo}" /></a></li>
+		</script>
+		
+		<script id="currentChannelTemplate" type="text/html">
+			<header>
+				<h1>${channel}</h1>
+			</header>
+			<img src="${logo}" />
+		</script>
+		
+		<script>
+			
+			var channels;
+			
+			$(document).ready(function() {
+				jQuery.ajax({
+					url: "feed.json",
+					dataType: "json",
+					success: stationsLoaded
+				});				
+			});				
+
+			function stationsLoaded(result) {				
+				channels = result.station.channels;
+				$("#channelsTemplate").tmpl(channels).appendTo("#channels");
+				
+				$("#channels a").click(function(e) {
+					e.preventDefault();
+
+					var index = $("#channels li a").index($(this));
+					var channel = channels[index];										
+					var streamUrl;
+										
+					if(Modernizr.audio && Modernizr.audio.ogg) {
+						streamUrl = channel.middle.ogg;
+					} else if(Modernizr.audio && Modernizr.audio.mp3) {
+						streamUrl = channel.middle.mp3;
+					};					
+					
+					if(streamUrl) {
+						$("audio").attr("src", streamUrl);
+						$("audio").get(0).play();
+					};
+					
+					$("#currentChannel").html("");
+					$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
+				});
+			};		
+		
+		</script>
+		
+	</body>
+	
+</html>
