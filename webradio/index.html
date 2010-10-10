@@ -56,7 +56,7 @@
 		    var currentIndex = -1;            
 			
 			$(document).ready(function() {
-                
+
                 if(Modernizr.sitemode) {
                     $("#install").click(function() {
                         window.external.msAddSiteMode();
@@ -98,9 +98,11 @@
 					streamUrl = channel.middle.mp3;
 				};					
 					
-				if(streamUrl) {
-                    audio.src = streamUrl;
-					audio.play();
+				if(streamUrl) {   
+                    audio.pause();        
+                    audio.src = streamUrl;   
+                    audio.load();     
+                    audio.play();
 				};
 					
 				$("#currentChannel").html("");
