@@ -2,15 +2,31 @@
 <html>
 	<head>
 		<title>NRK Nettradio</title>
+        <meta name="msapplication-navbutton-color" content="black" />
+        <meta name="msapplication-tooltip" content="Spill nettradio fra NRK" />
+        <meta name="msapplication-window" content="width=320;height=280" />
+        <meta name="msapplication-navbutton-color" content="black" />
+
 		<link rel="stylesheet" href="../css/style.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 		<script src="../js/jquery.tmpl.js"></script>
         <script src="../js/h5utils.js"></script>
 		<script src="../js/modernizr-1.5.js"></script>
         <script src="../js/modernizr-tests.js"></script>
+        <style>
+        
+            .insitemode #install, 
+            .no-sitemode #install
+            {
+                display: none;    
+            }
+           
+        </style>
 	</head>
 	
 	<body>
+
+        <button id="install">Launch In Site Mode </button>
 	
 		<ul id="channels">
 			
@@ -18,7 +34,7 @@
 		
 		<section>
 			<div id="currentChannel"></div>
-			<audio></audio>
+			<audio controls></audio>
 		</section>	
 		
 		<script id="channelsTemplate" type="text/html">
@@ -33,11 +49,21 @@
 		</script>
 		
 		<script>
-		    
-			var channels;
 
+            
+            var audio;
+		    var channels;
+		    var currentIndex = -1;            
 			
 			$(document).ready(function() {
+                
+                if(Modernizr.sitemode) {
+                    $("#install").click(function() {
+                        window.external.msAddSiteMode();
+                    });
+                };
+
+                audio = $("audio").get(0);
 				jQuery.ajax({
 					url: "feed.json",
 					dataType: "json",
@@ -48,7 +74,7 @@
 			function stationsLoaded(result) {
 			    channels = result.station.channels;
 
-			    if (Modernizr.pinnedsite) {
+			    if (Modernizr.insitemode) {
 			        createJumpList();
 			        createThumbToolbar();
 			    };
@@ -57,31 +83,34 @@
 				
 				$("#channels a").click(function(e) {
 					e.preventDefault();
-
-					var index = $("#channels li a").index($(this));
-					var channel = channels[index];										
-					var streamUrl;
-										
-					if(Modernizr.audio && Modernizr.audio.ogg) {
-						streamUrl = channel.middle.ogg;
-					} else if(Modernizr.audio && Modernizr.audio.mp3) {
-						streamUrl = channel.middle.mp3;
-					};					
-					
-					if(streamUrl) {
-						$("audio").attr("src", streamUrl);
-						$("audio").get(0).play();
-					};
-					
-					$("#currentChannel").html("");
-					$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
+					currentIndex = $("#channels li a").index($(this));
+                    playChannel(currentIndex);					
 				});
 			};
+
+            function playChannel(index) {
+                var channel = channels[index];										
+				var streamUrl;
+										
+				if(Modernizr.audio && Modernizr.audio.ogg) {
+					streamUrl = channel.middle.ogg;
+				} else if(Modernizr.audio && Modernizr.audio.mp3) {
+					streamUrl = channel.middle.mp3;
+				};					
+					
+				if(streamUrl) {
+                    audio.src = streamUrl;
+					audio.play();
+				};
+					
+				$("#currentChannel").html("");
+				$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
+            };
             
             function createJumpList() {
                 window.external.msSiteModeCreateJumplist("Radiokanaler");         
                 for(var i = 0; i < channels.length; ++i) {
-                    window.external.msSiteModeAddJumpListItem(channels[i].channel, "index.html#" + channels[i].name, "gfx/audio.ico");
+                    window.external.msSiteModeAddJumpListItem(channels[i].channel, "index.html#" + channels[i].name, "gfx/play.ico");
                 };
                 window.external.msSiteModeShowJumplist();
             }; 		
@@ -91,19 +120,33 @@
                 var playPauseButton = window.external.msSiteModeAddThumbBarButton("gfx/play.ico", "Spill");                
                 var nextButton = window.external.msSiteModeAddThumbBarButton("gfx/next.ico", "Neste");
 
-                var stylePlay = window.external.msSiteModeAddButtonStyle(playPauseButton, 'gfx/play.ico', "Spill");
-			    var stylePause = window.external.msSiteModeAddButtonStyle(playPauseButton, 'gfx/pause.ico', "Pause");
+                var stylePlay = window.external.msSiteModeAddButtonStyle(playPauseButton, "gfx/play.ico", "Spill");
+			    var stylePause = window.external.msSiteModeAddButtonStyle(playPauseButton, "gfx/pause.ico", "Pause");
 
                 window.external.msSiteModeShowThumbBar();
 
                 
                 addEvent(document, "msthumbnailclick", function(e) {
-                    if(e.buttonID == playPauseButton) {
-                        window.external.msSiteModeShowButtonStyle(playPauseButton, stylePause);
+                    switch(e.buttonID) {
+                        case playPauseButton:
+                            if(audio.paused) audio.play();
+                            else audio.pause();
+                            break;
+                        case prevButton: 
+                            break;
+                        default: break;
                     };
                 });
 
-                
+                addEvent(audio, "play", function() { 
+                    window.external.msSiteModeShowButtonStyle(playPauseButton, stylePause);
+                    window.external.msSiteModeSetIconOverlay("gfx/play.ico", "Spiller " + channels[currentIndex].channel);
+                });
+
+                addEvent(audio, "pause", function() {
+                    window.external.msSiteModeShowButtonStyle(playPauseButton, stylePlay);
+                    window.external.msSiteModeSetIconOverlay("gfx/pause.ico", "Pause " + channels[currentIndex].channel);
+                });                
             };	
 		
 		</script>
