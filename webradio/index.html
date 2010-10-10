@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="../css/style.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 		<script src="../js/jquery.tmpl.js"></script>
+        <script src="../js/h5utils.js"></script>
 		<script src="../js/modernizr-1.5.js"></script>
 	</head>
 	
@@ -39,11 +40,14 @@
 					url: "feed.json",
 					dataType: "json",
 					success: stationsLoaded
-				});				
-			});				
+				});                
+            });	            		
 
 			function stationsLoaded(result) {				
 				channels = result.station.channels;
+                createJumpList();
+                createThumbToolbar();
+
 				$("#channelsTemplate").tmpl(channels).appendTo("#channels");
 				
 				$("#channels a").click(function(e) {
@@ -67,7 +71,35 @@
 					$("#currentChannel").html("");
 					$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
 				});
-			};		
+			};
+            
+            function createJumpList() {
+                window.external.msSiteModeCreateJumplist("Radiokanaler");         
+                for(var i = 0; i < channels.length; ++i) {
+                    window.external.msSiteModeAddJumpListItem(channels[i].channel, "index.html#" + channels[i].name, "gfx/audio.ico");
+                };
+                window.external.msSiteModeShowJumplist();
+            }; 		
+            
+            function createThumbToolbar() {
+                var prevButton = window.external.msSiteModeAddThumbBarButton("gfx/prev.ico", "Forrige");                
+                var playPauseButton = window.external.msSiteModeAddThumbBarButton("gfx/play.ico", "Spill");                
+                var nextButton = window.external.msSiteModeAddThumbBarButton("gfx/next.ico", "Neste");
+
+                var stylePlay = window.external.msSiteModeAddButtonStyle(playPauseButton, 'gfx/play.ico', "Spill");
+			    var stylePause = window.external.msSiteModeAddButtonStyle(playPauseButton, 'gfx/pause.ico', "Pause");
+
+                window.external.msSiteModeShowThumbBar();
+
+                
+                addEvent(document, "msthumbnailclick", function(e) {
+                    if(e.buttonID == playPauseButton) {
+                        window.external.msSiteModeShowButtonStyle(playPauseButton, stylePause);
+                    };
+                });
+
+                
+            };	
 		
 		</script>
 		
