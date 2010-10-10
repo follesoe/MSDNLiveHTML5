@@ -22,6 +22,18 @@
 					};
 					audio.play();
 				});
+				
+				$("audio").bind("play", function() {
+					console.log("playing!");
+				});
+				
+				$("audio").bind("pause", function() {
+					console.log("pausing!");
+				});
+				
+				$("audio").bind("ended", function() {
+					console.log("ended!");
+				});
 							
 				$("a[href$='.mp3']").click(function(e) {
 					e.preventDefault();				
