@@ -2,39 +2,32 @@
 <html>
 	<head>
 		<title>HTML5 Podcast Client</title>
+  		<link rel="stylesheet" href="../css/style.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 		<script src="../js/h5utils.js"></script>
-		
 		<script>
 		
 			$(document).ready(function() {
-				
-				var currentAudio = localStorage.getItem("currentAudio");
-				var currentTime = localStorage.getItem("currentTime");
-				
-				if(currentAudio && currentTime) {
-					$("audio").attr("src", currentAudio);
-					//$("audio").attr("currentTime", currentTime);
-				}
-												
-
-				$("a[href$='.mp3']").click(function(e) {
-					e.preventDefault();
 					
-					var source = $(this).attr("href");
-					localStorage.setItem("currentAudio", source);
-					
-					$("audio").attr("src", source);
-					$("audio").get(0).play();
-
-				});
+				var audio = $("audio").get(0);
 				
 				$("audio").bind("timeupdate", function() {
-
-					localStorage.setItem("currentTime", $(this).attr("currentTime"));
-					
+					localStorage.setItem(audio.src, audio.currentTime);	
 				});
-
+				
+				$("audio").bind("loadedmetadata", function() {
+					var currentTime = localStorage.getItem(audio.src);
+					if(currentTime) {
+						audio.currentTime = parseFloat(currentTime);
+					};
+					audio.play();
+				});
+							
+				$("a[href$='.mp3']").click(function(e) {
+					e.preventDefault();				
+					audio.src = $(this).attr("href");					
+				});
+				
 			});	
 
 		
