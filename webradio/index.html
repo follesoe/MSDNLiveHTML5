@@ -33,22 +33,7 @@
 		</script>
 		
 		<script>
-			
-            console.log(window.external.msIsSiteMode);
-            console.log(window.external.msIsSiteMode());
-
-            try
-            {
-                if(window.external.msIsSiteMode) {
-                    console.log("Got function!");
-                } else {
-                    console.log("No function!");
-                }
-            } catch(e) {
-                console.log("Exception?");
-            };
-
-
+		    
 			var channels;
 
 			
@@ -60,10 +45,13 @@
 				});                
             });	            		
 
-			function stationsLoaded(result) {				
-				channels = result.station.channels;
-                createJumpList();
-                createThumbToolbar();
+			function stationsLoaded(result) {
+			    channels = result.station.channels;
+
+			    if (Modernizr.pinnedsite) {
+			        createJumpList();
+			        createThumbToolbar();
+			    };
 
 				$("#channelsTemplate").tmpl(channels).appendTo("#channels");
 				
