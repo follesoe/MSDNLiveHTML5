@@ -18,16 +18,14 @@
 	</head>
 	
 	<body>
-
-        <button id="install">Launch In Site Mode </button>
+        <button id="install">Legg til Start-meny</button>
 	
-		<select>
-			
-		</select>
+        <label for="selectChannel">Velg radio stasjon</label>
+		<select id="selectChannel"></select>
 		
 		<section>
 			<div id="currentChannel"></div>
-			<audio autoplay controls></audio>
+			<audio controls autoplay></audio>
 		</section>	
 		
 		<script id="channelsTemplate" type="text/html">
@@ -35,10 +33,7 @@
 		</script>
 		
 		<script id="currentChannelTemplate" type="text/html">
-			<header>
-				<h1>${channel}</h1>
-			</header>
-			<img src="${logo}" />
+			<img src="${logo}" alt="${channel}" />
 		</script>
 		
 		<script>            
@@ -110,7 +105,7 @@
             function createJumpList() {
                 window.external.msSiteModeCreateJumplist("Radiokanaler");         
                 for(var i = 0; i < channels.length; ++i) {
-                    window.external.msSiteModeAddJumpListItem(channels[i].channel, "index.html#" + channels[i].name, "gfx/play.ico");
+                    window.external.msSiteModeAddJumpListItem(channels[i].channel, channels[i].website, "gfx/play.ico");
                 };
                 window.external.msSiteModeShowJumplist();
             }; 		
