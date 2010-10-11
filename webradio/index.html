@@ -62,7 +62,6 @@
             });	            		
 
 			function stationsLoaded(result) {
-                console.log("ready!");                                                
                 audio = $("audio").get(0);
 			    channels = result.station.channels;
 
@@ -71,21 +70,42 @@
 			        createThumbToolbar();
 			    };
 
+                addEvent(audio, "play", function() { localStorage.setItem("state", "playing"); });
+                addEvent(audio, "pause", function() { localStorage.setItem("state", "pausing"); });
+
 				$("#channelsTemplate").tmpl(channels).appendTo("select");
-				
-				$("select").change(function(e) {                    
-					currentIndex = $(this).get(0).selectedIndex;
-                    playChannel(currentIndex);					
+
+                var savedChannel = localStorage.getItem("selectedChannel");
+                var playState = localStorage.getItem("state");
+                if(savedChannel) {
+                    $("select").val(savedChannel);                    
+                };
+                showSelectedChannel();
+                
+                if(playState && playState == "playing") {
+                    playSelectedChannel();
+                };
+                                			
+				$("select").change(function(e) {      
+                    localStorage.setItem("selectedChannel", $(this).val());
+                    showSelectedChannel();
+					playSelectedChannel();
 				});
 			};
 
-            function playChannel(index) {
-                var channel = channels[index];										
+            function showSelectedChannel() {
+                var channel = channels[$("select").get(0).selectedIndex];
+                $("#currentChannel").html("");
+				$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
+            };        
+
+            function playSelectedChannel() {
+                var channel = channels[$("select").get(0).selectedIndex];										
 				var streamUrl;
 										
-				if(Modernizr.audio && Modernizr.audio.ogg) {
+				if(Modernizr.audio.ogg) {
 					streamUrl = channel.middle.ogg;
-				} else if(Modernizr.audio && Modernizr.audio.mp3) {
+				} else if(Modernizr.audio.mp3) {
 					streamUrl = channel.middle.mp3;
 				};					
 					
@@ -93,10 +113,7 @@
                     audio.pause();        
                     audio.src = streamUrl;   
                     audio.load();     
-				};
-					
-				$("#currentChannel").html("");
-				$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
+				};				
             };
             
             function createJumpList() {
@@ -116,7 +133,6 @@
 			    var stylePause = window.external.msSiteModeAddButtonStyle(playPauseButton, "gfx/pause.ico", "Pause");
 
                 window.external.msSiteModeShowThumbBar();
-
                 
                 addEvent(document, "msthumbnailclick", function(e) {
                     switch(e.buttonID) {
@@ -130,7 +146,7 @@
                     };
                 });
 
-                addEvent(audio, "play", function() { 
+                addEvent(audio, "play", function() {                     
                     window.external.msSiteModeShowButtonStyle(playPauseButton, stylePause);
                     window.external.msSiteModeSetIconOverlay("gfx/play.ico", "Spiller " + channels[currentIndex].channel);
                 });
