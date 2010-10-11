@@ -51,9 +51,12 @@
 		<script>            
             var audio;
 		    var channels;
-		    var currentIndex = -1;            
 			
-			$(document).ready(function() {                
+			$(document).ready(function() {              
+                audio = $("audio").get(0);            
+                addEvent(audio, "play", function() { localStorage.setItem("state", "playing"); });
+                addEvent(audio, "pause", function() { localStorage.setItem("state", "pausing"); });
+                        
                 jQuery.ajax({
 					url: "feed.json",
 					dataType: "json",
@@ -61,27 +64,24 @@
 				});                
             });	            		
 
-			function stationsLoaded(result) {
-                audio = $("audio").get(0);
+			function stationsLoaded(result) {                
 			    channels = result.station.channels;
+                $("#channelsTemplate").tmpl(channels).appendTo("select");
 
 			    if (Modernizr.insitemode) {
 			        createJumpList();
 			        createThumbToolbar();
-			    };
+			    };				
 
-                addEvent(audio, "play", function() { localStorage.setItem("state", "playing"); });
-                addEvent(audio, "pause", function() { localStorage.setItem("state", "pausing"); });
-
-				$("#channelsTemplate").tmpl(channels).appendTo("select");
-
-                var savedChannel = localStorage.getItem("selectedChannel");
-                var playState = localStorage.getItem("state");
+                var savedChannel = localStorage.getItem("selectedChannel");                
                 if(savedChannel) {
                     $("select").val(savedChannel);                    
+                } else {
+                    $("select").val("P3");
                 };
                 showSelectedChannel();
                 
+                var playState = localStorage.getItem("state");
                 if(playState && playState == "playing") {
                     playSelectedChannel();
                 };
@@ -94,20 +94,14 @@
 			};
 
             function showSelectedChannel() {
-                var channel = channels[$("select").get(0).selectedIndex];
+                var channel = getSelectedChannel();
                 $("#currentChannel").html("");
 				$("#currentChannelTemplate").tmpl(channel).appendTo("#currentChannel");
             };        
 
             function playSelectedChannel() {
-                var channel = channels[$("select").get(0).selectedIndex];										
-				var streamUrl;
-										
-				if(Modernizr.audio.ogg) {
-					streamUrl = channel.middle.ogg;
-				} else if(Modernizr.audio.mp3) {
-					streamUrl = channel.middle.mp3;
-				};					
+                var channel = getSelectedChannel();
+				var streamUrl = Modernizr.audio.ogg ? channel.middle.ogg : channel.middle.mp3;
 					
 				if(streamUrl) {   
                     audio.pause();        
@@ -115,6 +109,10 @@
                     audio.load();     
 				};				
             };
+
+            function getSelectedChannel() {
+                return channels[$("select").get(0).selectedIndex];
+            };            
             
             function createJumpList() {
                 window.external.msSiteModeCreateJumplist("Radiokanaler");         
@@ -148,12 +146,12 @@
 
                 addEvent(audio, "play", function() {                     
                     window.external.msSiteModeShowButtonStyle(playPauseButton, stylePause);
-                    window.external.msSiteModeSetIconOverlay("gfx/play.ico", "Spiller " + channels[currentIndex].channel);
+                    window.external.msSiteModeSetIconOverlay("gfx/play.ico", "Spiller " + getSelectedChannel().channel);
                 });
 
                 addEvent(audio, "pause", function() {
                     window.external.msSiteModeShowButtonStyle(playPauseButton, stylePlay);
-                    window.external.msSiteModeSetIconOverlay("gfx/pause.ico", "Pause " + channels[currentIndex].channel);
+                    window.external.msSiteModeSetIconOverlay("gfx/pause.ico", "Pause " + getSelectedChannel().channel);
                 });                
             };	
 		
