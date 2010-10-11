@@ -5,7 +5,7 @@
         <meta name="msapplication-navbutton-color" content="black" />
         <meta name="msapplication-tooltip" content="Spill nettradio fra NRK" />
         <meta name="msapplication-window" content="width=320;height=280" />
-        <meta name="msapplication-navbutton-color" content="black" />
+        <meta name="msapplication-navbutton-color" content="red" />        
 
 		<link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="screen.css">
@@ -102,7 +102,7 @@
                 return channels[$("select").get(0).selectedIndex];
             };            
             
-            function createJumpList() {
+            function createJumpList() {                            
                 window.external.msSiteModeCreateJumplist("Radiokanaler");         
                 for(var i = 0; i < channels.length; ++i) {
                     window.external.msSiteModeAddJumpListItem(channels[i].channel, channels[i].website, "gfx/play.ico");
@@ -140,3 +140,4 @@
 	</body>
 	
 </html>
+
