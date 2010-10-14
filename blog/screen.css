@@ -67,6 +67,10 @@ body {
  	display: inline;
 }
 
+.article {
+	margin-bottom: 3em;
+}
+
 #footer {
 	width: 900px;
  	clear: both;
@@ -75,4 +79,8 @@ body {
  	background: #BD9C8C;
  	margin: 0px 0px 10px 0px;
  	padding: 10px;
+}
+
+#footer p {
+	font-style: italic;
 }
