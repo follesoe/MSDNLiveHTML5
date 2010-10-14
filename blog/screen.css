@@ -55,6 +55,10 @@ body {
  	float: left;
 }
 
+#sidebar ul {
+	list-style: none;
+}
+
 #articles {
  	float: right;
  	color: #333;
