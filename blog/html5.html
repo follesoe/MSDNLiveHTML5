@@ -2,37 +2,39 @@
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="screen.css" />
-		<title>xhtml</title>			
+		<link rel="stylesheet" href="screen5.css" />
+		<title>HTML5 blog</title>			
 	</head>
 	<body>
 		<div id="wrapper">
-			<div id="header">
-				<h1>Welcome to my fantastic blog!</h1>
-				<h2>About HTML5 and other cool stuff!</h2>
-				<div id="navigation">
+			<header>
+				<hgroup>
+					<h1>Welcome to my fantastic blog!</h1>
+					<h2>About HTML5 and other cool stuff!</h2>
+				</hgroup>
+				<nav>
 					<ul>
 						<li><a href="#">home</a></li>
 						<li><a href="#">about me</a></li>
 						<li><a href="#">my code</a></li>
 					</ul>
-				</div>
-			</div>
+				</nav>
+			</header>
 		
-			<div id="articles">
-				<div class="article">
+			<section>
+				<article>
 					<h2>Tittel 1</h2>
-					<p class="pubdate">Published 01.10.2010</p>
+					<p>Published <time datetime="2010-01-01" pubdate>01.01.2010</time></p>
 					<p>Lorem ipsum</p>
-				</div>
-				<div class="article">
+				</article>
+				<article>
 					<h2>Tittel 2</h2>
-					<p class="pubdate">Published 01.09.2010</p>
+					<p>Published <time datetime="2010-01-02" pubdate>02.01.2010</time></p>
 					<p>Lorem ipsum</p>					
-				</div>						
-			</div>
+				</article>						
+			</section>
 		
-			<div id="sidebar">
+			<aside>
 				<div id="twitter">
 					<h2>My Twitter Stream</h2>
 					<ul>
@@ -47,11 +49,11 @@
 						<li><a href="#">personal</a></li>
 					</ul>
 				</div>
-			</div>
+			</aside>
 		
-			<div id="footer">
-				<p>Copyright 2010 - Jonas Follesø - Content can be used under a Creative Commons License</p>
-			</div>
+			<footer>
+				<small>Copyright 2010 - Jonas Follesø - Content can be used under a Creative Commons License</small>
+			</footer>
 		</div>
 	</body>
 </html>
