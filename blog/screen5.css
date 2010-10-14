@@ -44,7 +44,7 @@ nav li a {
 	border: solid 1px black;
 }
 
-aside {
+body > div > aside {
 	color: #333;
 	border: 1px solid #ccc;
  	background: #E7DBD5;
@@ -75,6 +75,13 @@ article {
 	margin-bottom: 3em;
 }
 
+article > aside {
+	font-style: italic;
+	background-color: brown;
+	float: left;
+	padding: 5px;
+}
+
 footer {
 	width: 900px;
  	clear: both;
@@ -87,4 +94,9 @@ footer {
 
 footer p {
 	font-style: italic;
+}
+
+mark {
+	background-color: yellow;
+	color: black;
 }
