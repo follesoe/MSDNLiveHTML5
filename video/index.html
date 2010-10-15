@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>HTML5 Video Example</title>
+        
+        <script src="../js/h5utils.js"></script>
+
+    </head>
+    <body>
+        
+        <video controls>            
+            <source src="shark.mov" />
+            <source src="shark.ogv" />
+            <object width="640" height="385">
+                <param name="movie" value="http://www.youtube.com/v/DG44G1X3voY?fs=1&amp;hl=en_US"></param>
+                <param name="allowFullScreen" value="true"></param>
+                <param name="allowscriptaccess" value="always"></param>
+                <embed src="http://www.youtube.com/v/DG44G1X3voY?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed>
+                <a href="shark.mov">Last ned film!</a>
+            </object>            
+        </video>
+
+        <input type="button" id="playPause" value="Play/Pause" />
+
+        <script type="text/javascript">
+        
+            var video = document.getElementsByTagName("video")[0];
+                        
+            var playPause = document.getElementById("playPause");
+
+            addEvent(playPause, "click", function() {
+                if(video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                };
+            });
+
+
+        </script>
+
+    </body>
+</html>
