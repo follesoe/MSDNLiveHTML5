@@ -1,0 +1,43 @@
+﻿body
+{
+    font-size: 14px;
+}
+
+
+form label {
+    width:400px;
+    display: block;
+    height: 25px;
+    clear: right;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+label.error  {
+    float: right; 
+    color: red; 
+    padding-left: .5em; 
+    vertical-align: top; 
+}
+
+form label input, form label textarea {
+    float: right;
+    width: 200px;
+}
+
+form label textarea {
+    height: 100px;
+}
+
+input[type=range]:before {
+    content: attr(min);
+}
+
+input[type=range]:after {
+    content: attr(max);
+}
+
+input[type=submit] {
+    margin: 5px 0 0 250px;
+}

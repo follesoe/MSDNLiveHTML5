@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html />
+<html>
+    <head>
+        <title>HTML5 Web Forms</title>        
+        <link rel="stylesheet" href="style.css">
+        <script src="../js/modernizr-1.5.js"></script>
+		<script src="../js/jquery-1.4.2.js"></script>
+        <script src="../js/jquery.validate.js"></script>
+
+        <script>
+        
+            $(document).ready(function() {
+
+
+
+                if(!Modernizr.inputtypes.url) {
+                    $("input[type=url]").addClass("url");
+                };
+
+                if(!Modernizr.inputtypes.range) {
+                    $("input[type=range]").addClass("number");
+                }
+
+                if(!Modernizr.inputtypes.date) {
+                    $("input[type=date]").addClass("date");
+                }
+
+                if(!Modernizr.inputtypes.email) {
+                    $("input[type=email]").addClass("email");
+                };
+
+                if(!Modernizr.input.required) {
+                    $("input[required]").addClass("required");
+                };
+
+
+                $("form").validate();
+            });
+            
+        </script>
+
+    </head>
+    <body>        
+        <form id="commentForm" method="post" action="">
+            <label>E-post <input type="email" name="email" placeholder="your@email.com" required></label>
+            <label>Hjemmeside <input type="url" name="homepage" placeholder="http://blog.com" required></label>
+            <label>Terningkast <input type="range" name="rating" min="1" max="6" value="5"></label>
+            <label>Kommentar<textarea></textarea></label>
+            <label>Publiseres<input type="date"></label>
+            <input type="submit" value="Send">
+        </form>
+    </body>
+</html>
