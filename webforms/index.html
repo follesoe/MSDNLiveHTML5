@@ -6,12 +6,11 @@
         <script src="../js/modernizr-1.5.js"></script>
 		<script src="../js/jquery-1.4.2.js"></script>
         <script src="../js/jquery.validate.js"></script>
+        <script src="../js/html5placeholder.jquery.js"></script>
 
         <script>
-        
             $(document).ready(function() {
-
-
+                $('input[placeholder]').placeholder();
 
                 if(!Modernizr.inputtypes.url) {
                     $("input[type=url]").addClass("url");
@@ -36,7 +35,6 @@
 
                 $("form").validate();
             });
-            
         </script>
 
     </head>
