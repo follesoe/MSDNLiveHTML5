@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html />
+
+<html>
+    <head>
+        <title>Canvas - In old browsers!</title>
+        <script src="Html5Canvas.js"></script>
+    </head>
+    <body>
+        
+        <canvas id="canvas1" width="640" height="480">            
+            <script>                
+                InsertCanvasObject("canvas1silverlight", 640, 480, function() { 
+                    runDemo("canvas1silverlight", demo1) 
+                });
+            </script>
+        </canvas>
+
+        <script>            
+
+            function runDemo(canvasId, func) {
+                var canvas = document.getElementById(canvasId);
+                if (canvas && canvas.getContext) {
+                    var context = canvas.getContext("2d");
+                    func(context);
+                }
+            }
+                    
+            function demo1(context) {
+                context.fillStyle = "rgb(0, 162, 232)";
+                context.fillRect(0, 0, 100, 100);
+                context.save();
+                context.fillStyle = "rgba(255, 127, 39, 0.8)";
+                context.fillRect(25, 25, 100, 100);
+                context.strokeStyle = "rgb(255, 174, 201)";
+                context.lineWidth = 15;
+                context.strokeRect(50, 50, 100, 100);
+                context.restore();
+                context.beginPath()
+                context.moveTo(75, 75);
+                context.lineTo(175, 75);
+                context.lineTo(75, 175);
+                context.fill();
+                var gradient = context
+                    .createLinearGradient(150, 100, 150, 200);
+                gradient.addColorStop(0/5, "red");
+                gradient.addColorStop(1/5, "orange");
+                gradient.addColorStop(2/5, "yellow");
+                gradient.addColorStop(3/5, "green");
+                gradient.addColorStop(4/5, "blue");
+                gradient.addColorStop(5/5, "purple");
+                context.fillStyle = gradient;
+                context.fillRect(100, 100, 100, 100);
+            }    
+            
+            runDemo("canvas1", demo1);    
+        
+        </script>
+
+    </body>
+</html>

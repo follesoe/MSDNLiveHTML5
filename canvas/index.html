@@ -2,16 +2,74 @@
 
 <html>
     <head>
-        <title>HTML5 Canvas Example</title>
-        
+        <title>HTML5 Canvas Example</title>        
         <script src="../js/h5utils.js"></script>
 
     </head>
     <body>
         
+        <canvas width="640" height="480"></canvas>
+
+        <br />
+        <button id="reset">reset</button>
+        <button id="invert">invert</button>
+        <button id="grayScale">gray scale</button>
 
         <script>
         
+            var canvas = document.getElementsByTagName("canvas")[0];
+            var ctx = canvas.getContext("2d");
+
+            var img = document.createElement("img");
+            img.onload = function() {
+
+                var resetButton = document.getElementById("reset");
+                addEvent(resetButton, "click", reset);
+
+                var invertButton = document.getElementById("invert");
+                addEvent(invertButton, "click", invert);
+
+                var grayScaleButton = document.getElementById("grayScale");
+                addEvent(grayScaleButton, "click", grayScale);
+
+                reset();
+            }
+
+            img.src = "books.jpg";
+
+            function reset() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+
+            function invert() {
+                var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);                
+                for(var i = 0, n = pixels.data.length; i < n; i += 4) {
+                    pixels.data[i+0] = 255 - pixels.data[i+0];
+                    pixels.data[i+1] = 255 - pixels.data[i+1];
+                    pixels.data[i+2] = 255 - pixels.data[i+2];
+                }
+                ctx.putImageData(pixels, 0, 0);
+            }
+
+            function grayScale() {
+                var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);                
+                for(var i = 0, n = pixels.data.length; i < n; i += 4) {
+                    
+                    var val = (pixels.data[i+0] * 0.21) + 
+                              (pixels.data[i+1] * 0.71) + 
+                              (pixels.data[i+2] * 0.07);
+                    
+                    pixels.data[i+0] = val;
+                    pixels.data[i+1] = val;
+                    pixels.data[i+2] = val;
+                }
+                ctx.putImageData(pixels, 0, 0);
+            }
+
+            function findColorDifference(dif, dest, src) {	
+                return(dif * dest + (1 - dif) * src);
+            }
+
         </script>
 
     </body>
