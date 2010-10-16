@@ -14,6 +14,7 @@
         <button id="reset">reset</button>
         <button id="invert">invert</button>
         <button id="grayScale">gray scale</button>
+        <button id="save">lagre</button>
 
         <script>
         
@@ -32,6 +33,9 @@
                 var grayScaleButton = document.getElementById("grayScale");
                 addEvent(grayScaleButton, "click", grayScale);
 
+                var saveButton = document.getElementById("save");
+                addEvent(saveButton, "click", save);
+
                 reset();
             }
 
@@ -39,6 +43,11 @@
 
             function reset() {
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+
+            function save() {
+                var url = canvas.toDataURL();
+                document.location.href = url;
             }
 
             function invert() {
